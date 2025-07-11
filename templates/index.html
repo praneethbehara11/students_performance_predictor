@@ -8,12 +8,11 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            /* Ensure body takes full viewport height to center content vertically */
-            min-height: 100vh;
+            min-height: 100vh; /* Ensures body takes full viewport height for vertical centering */
             display: flex;
-            flex-direction: column;
-            justify-content: center; /* Center content vertically */
-            align-items: center; /* Center content horizontally */
+            flex-direction: column; /* Stacks children vertically */
+            justify-content: center; /* Centers children along the main axis (vertically, since flex-direction is column) */
+            align-items: center; /* Centers children along the cross-axis (horizontally, since flex-direction is column) */
             background-color: white;
         }
         h1 {
@@ -21,7 +20,7 @@
         }
         form {
             margin-top: 10px;
-            width: 250px;
+            width: 250px; /* This sets the form's width, but align-items should center this 250px block */
         }
         input[type="text"], input[type="submit"], button, select {
             margin: 5px 0;
