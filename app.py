@@ -21,13 +21,10 @@ def home():
         internal = request.form['internal']
 
         try:
-            # Try to convert inputs to float
-            hours_f = float(hours)
-            attendance_f = float(attendance)
-            internal_f = float(internal)
-
-            # Predict
-            prediction = model.predict([[hours_f, attendance_f, internal_f]])
+            h = float(hours)
+            a = float(attendance)
+            i = float(internal)
+            prediction = model.predict([[h, a, i]])
             if prediction[0] == 1:
                 result = "✅ Pass 🎉"
             else:
@@ -39,10 +36,21 @@ def home():
                 writer.writerow([hours, attendance, internal, result])
 
         except ValueError:
-            error = "⚠️ Please enter numbers only!"
+            error = "⚠️ Please enter only numbers!"
 
-    return render_template('index.html', result=result, error=error,
+    return render_template('index.html', result=result, error=error, 
                            hours=hours, attendance=attendance, internal=internal)
+
+@app.route('/history')
+def history():
+    rows = []
+    try:
+        with open('predictions.csv', newline='') as f:
+            reader = csv.reader(f)
+            rows = list(reader)
+    except FileNotFoundError:
+        pass
+    return render_template('history.html', rows=rows)
 
 if __name__ == '__main__':
     app.run(debug=True)
