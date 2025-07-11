@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request
 import pickle
 import csv
-from datetime import datetime
 
 app = Flask(__name__)
 
@@ -11,6 +10,7 @@ model = pickle.load(open('model.pkl', 'rb'))
 @app.route('/', methods=['GET', 'POST'])
 def home():
     result = None
+    error = None
     hours = ''
     attendance = ''
     internal = ''
@@ -20,29 +20,29 @@ def home():
         attendance = request.form['attendance']
         internal = request.form['internal']
 
-        prediction = model.predict([[float(hours), float(attendance), float(internal)]])
-        if prediction[0] == 1:
-            result = "✅ Pass 🎉"
-        else:
-            result = "❌ Fail 😟"
+        try:
+            # Try to convert inputs to float
+            hours_f = float(hours)
+            attendance_f = float(attendance)
+            internal_f = float(internal)
 
-        # Save to CSV with date & time
-        with open('predictions.csv', 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow([hours, attendance, internal, result, datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+            # Predict
+            prediction = model.predict([[hours_f, attendance_f, internal_f]])
+            if prediction[0] == 1:
+                result = "✅ Pass 🎉"
+            else:
+                result = "❌ Fail 😟"
 
-    return render_template('index.html', result=result, hours=hours, attendance=attendance, internal=internal)
+            # Save to CSV
+            with open('predictions.csv', 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow([hours, attendance, internal, result])
 
-@app.route('/history')
-def history():
-    history = []
-    try:
-        with open('predictions.csv', 'r') as f:
-            reader = csv.reader(f)
-            history = list(reader)
-    except FileNotFoundError:
-        pass
-    return render_template('history.html', history=history)
+        except ValueError:
+            error = "⚠️ Please enter numbers only!"
+
+    return render_template('index.html', result=result, error=error,
+                           hours=hours, attendance=attendance, internal=internal)
 
 if __name__ == '__main__':
     app.run(debug=True)
