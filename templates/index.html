@@ -9,6 +9,7 @@
             padding: 0;
             height: 100%;
             font-family: Arial, sans-serif;
+            transition: background-color 0.3s;
         }
         body {
             display: flex;
@@ -21,10 +22,8 @@
             width: 280px;
         }
         h1 {
+            color: #333;
             margin-bottom: 10px;
-        }
-        form {
-            margin-top: 10px;
         }
         input[type="text"], input[type="submit"], button, select {
             margin: 5px 0;
@@ -33,49 +32,55 @@
             box-sizing: border-box;
         }
         .result {
-            margin-top: 15px;
+            margin-top: 10px;
             font-weight: bold;
-            font-size: 1.1em;
+            color: green;
+        }
+        .error {
+            margin-top: 10px;
+            font-weight: bold;
+            color: red;
         }
         a {
             display: inline-block;
-            margin-top: 10px;
+            margin: 10px 0;
             text-decoration: none;
             color: #007BFF;
         }
         footer {
-            margin-top: 20px;
+            margin-top: 15px;
             font-size: 0.9em;
             color: #555;
         }
     </style>
+    <script>
+        function resetFields() {
+            document.querySelector('input[name="hours"]').value = '';
+            document.querySelector('input[name="attendance"]').value = '';
+            document.querySelector('input[name="internal"]').value = '';
+        }
+        function changeBackgroundColor() {
+            var color = document.getElementById("bgColor").value;
+            document.body.style.backgroundColor = color;
+        }
+    </script>
 </head>
 <body>
 <div class="container">
     <h1>Student Performance Predictor</h1>
-    
+
     <a href="/history">📊 View Prediction History</a>
 
-    <form method="POST" onsubmit="return validateInputs()">
-        <input type="text" name="hours" id="hours" placeholder="Study Hours" value="{{ hours }}" required>
-        <input type="text" name="attendance" id="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
-        <input type="text" name="internal" id="internal" placeholder="Internal Marks" value="{{ internal }}" required>
-        
+    <form method="POST">
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
+        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
+        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
         <input type="submit" value="Predict">
-        <button type="reset">Reset</button>
+        <button type="button" onclick="resetFields()">Reset</button>
     </form>
 
-    <select onchange="document.body.style.backgroundColor=this.value">
-        <option value="white">Choose Background Color</option>
-        <option value="#FFFAE3">🌼 Light Yellow</option>
-        <option value="#E0F7FA">🌊 Light Blue</option>
-        <option value="#FFF0F5">🌸 Lavender Blush</option>
-        <option value="#F0FFF0">🍃 Honeydew</option>
-        <option value="#FFFFE0">🌞 Light Golden</option>
-    </select>
-
     {% if error %}
-    <div class="result" style="color: red;">
+    <div class="error">
         {{ error }}
     </div>
     {% endif %}
@@ -86,22 +91,19 @@
     </div>
     {% endif %}
 
+    <label for="bgColor">🎨 Change Background Color:</label>
+    <select id="bgColor" onchange="changeBackgroundColor()">
+        <option value="white">White</option>
+        <option value="lightyellow">Light Yellow</option>
+        <option value="lightgreen">Light Green</option>
+        <option value="lightblue">Light Blue</option>
+        <option value="lavender">Lavender</option>
+        <option value="lightpink">Light Pink</option>
+    </select>
+
     <footer>
         Designed & Developed by Praneeth Behara
     </footer>
 </div>
-
-<script>
-    function validateInputs() {
-        let hours = document.getElementById('hours').value;
-        let attendance = document.getElementById('attendance').value;
-        let internal = document.getElementById('internal').value;
-        if (isNaN(hours) || isNaN(attendance) || isNaN(internal)) {
-            alert("❗ Please enter only numbers for all fields.");
-            return false;
-        }
-        return true;
-    }
-</script>
 </body>
 </html>
