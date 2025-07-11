@@ -10,9 +10,9 @@
     <a href="/history">📊 View Prediction History</a>
 
     <form method="POST">
-        <input type="text" name="hours" placeholder="Study Hours" required><br>
-        <input type="text" name="attendance" placeholder="Attendance %" required><br>
-        <input type="text" name="internal" placeholder="Internal Marks" required><br>
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required><br>
+<input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
+<input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
     </form>
