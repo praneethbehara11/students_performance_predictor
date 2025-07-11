@@ -19,6 +19,10 @@ def home():
             result = "✅ Pass 🎉"
         else:
             result = "❌ Fail 😟"
+        # Save to CSV (this must be after setting result, and indented under POST)
+        with open('predictions.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([hours, attendance, internal, result])
     return render_template('index.html', result=result)
 
 if __name__ == '__main__':
