@@ -1,26 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Student Performance Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>Student Performance Predictor</h1>
-    <form method="post">
-        <label for="hours">Hours Studied:</label><br>
-        <input type="number" step="any" name="hours" required><br><br>
-
-        <label for="attendance">Attendance (%):</label><br>
-        <input type="number" step="any" name="attendance" required><br><br>
-
-        <label for="internal">Internal Marks:</label><br>
-        <input type="number" step="any" name="internal" required><br><br>
-
+    <form method="POST">
+        <input type="text" name="hours" placeholder="Study Hours" required><br>
+        <input type="text" name="attendance" placeholder="Attendance %" required><br>
+        <input type="text" name="internal" placeholder="Internal Marks" required><br>
         <input type="submit" value="Predict">
+        <button type="reset">Reset</button>
     </form>
-
     {% if result %}
-        <h2>Prediction Result: {{ result }}</h2>
+    <div class="result">
+        Prediction Result: {{ result }}
+    </div>
     {% endif %}
 </body>
 </html>
