@@ -6,28 +6,26 @@
 </head>
 <body>
     <h1>📊 Prediction History</h1>
-    <a href="/">⬅ Back to Predictor</a>
-    {% if history %}
-        <table>
-            <tr>
-                <th>Study Hours</th>
-                <th>Attendance %</th>
-                <th>Internal Marks</th>
-                <th>Result</th>
-                <th>Date & Time</th>
-            </tr>
-            {% for row in history %}
-            <tr>
-                <td>{{ row[0] }}</td>
-                <td>{{ row[1] }}</td>
-                <td>{{ row[2] }}</td>
-                <td>{{ row[3] }}</td>
-                <td>{{ row[4] }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+    <a href="/">⬅️ Back to Predictor</a>
+    {% if rows %}
+    <table border="1">
+        <tr>
+            <th>Study Hours</th>
+            <th>Attendance %</th>
+            <th>Internal Marks</th>
+            <th>Result</th>
+        </tr>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
     {% else %}
-        <p>No predictions yet!</p>
+    <p>No prediction history yet.</p>
     {% endif %}
 </body>
 </html>
