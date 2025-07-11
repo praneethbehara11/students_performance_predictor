@@ -5,75 +5,70 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body {
+            text-align: center;
             font-family: Arial, sans-serif;
-            padding: 20px;
-            transition: background-color 0.3s;
+            margin: 0;
+            padding: 0;
+            background-color: white;
         }
         h1 {
-            color: #333;
+            margin-top: 30px;
+        }
+        form {
+            margin: 20px auto;
+            width: 250px;
+        }
+        input[type="text"], input[type="submit"], button {
+            margin: 5px;
+            padding: 8px;
+            width: 100%;
         }
         .result {
-            margin-top: 10px;
+            margin-top: 20px;
             font-weight: bold;
-            color: green;
+            font-size: 1.2em;
         }
-        .error {
-            margin-top: 10px;
-            font-weight: bold;
-            color: red;
+        a {
+            display: inline-block;
+            margin: 10px;
+            text-decoration: none;
+            color: #007BFF;
         }
-        select {
-            margin-top: 10px;
+        footer {
+            margin-top: 40px;
+            padding: 10px;
+            font-size: 0.9em;
+            color: #555;
         }
     </style>
-    <script>
-        function resetFields() {
-            document.querySelector('input[name="hours"]').value = '';
-            document.querySelector('input[name="attendance"]').value = '';
-            document.querySelector('input[name="internal"]').value = '';
-        }
-        function changeBackgroundColor() {
-            var color = document.getElementById("bgColor").value;
-            document.body.style.backgroundColor = color;
-        }
-    </script>
 </head>
 <body>
     <h1>Student Performance Predictor</h1>
 
-    <a href="/history">📊 View Prediction History</a><br><br>
+    <a href="/history">📊 View Prediction History</a>
 
     <form method="POST">
         <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required><br>
         <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
         <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
         <input type="submit" value="Predict">
-        <button type="button" onclick="resetFields()">Reset</button>
+        <button type="reset">Reset</button>
     </form>
 
-    <!-- Show error if input is invalid -->
     {% if error %}
-    <div class="error">
+    <div class="result" style="color: red;">
         {{ error }}
     </div>
     {% endif %}
 
-    <!-- Show prediction result -->
     {% if result %}
     <div class="result">
         Prediction Result: {{ result }}
     </div>
     {% endif %}
 
-    <!-- Background color selector -->
-    <label for="bgColor">🎨 Change Background Color:</label>
-    <select id="bgColor" onchange="changeBackgroundColor()">
-        <option value="white">White</option>
-        <option value="lightyellow">Light Yellow</option>
-        <option value="lightgreen">Light Green</option>
-        <option value="lightblue">Light Blue</option>
-        <option value="lavender">Lavender</option>
-        <option value="lightpink">Light Pink</option>
-    </select>
+    <footer>
+        Designed & Developed by Praneeth Behara
+    </footer>
 </body>
 </html>
