@@ -10,9 +10,9 @@
             padding: 0;
             min-height: 100vh;
             display: flex;
-            justify-content: center;  /* center horizontally */
-            align-items: center;      /* center vertically */
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             background-color: white;
         }
         h1 {
@@ -47,16 +47,33 @@
 </head>
 <body>
     <h1>Student Performance Predictor</h1>
-
+    
     <a href="/history">📊 View Prediction History</a>
 
     <form method="POST">
-        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required><br>
-        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
-        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
+        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
+        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
+        
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
     </form>
+
+    <!-- Color theme switch -->
+    <select onchange="document.body.style.backgroundColor=this.value">
+        <option value="white">Choose Background Color</option>
+        <option value="#FFFAE3">🌼 Light Yellow</option>
+        <option value="#E0F7FA">🌊 Light Blue</option>
+        <option value="#FFF0F5">🌸 Lavender Blush</option>
+        <option value="#F0FFF0">🍃 Honeydew</option>
+        <option value="#FFFFE0">🌞 Light Golden</option>
+    </select>
+
+    {% if error %}
+    <div class="result" style="color: red;">
+        {{ error }}
+    </div>
+    {% endif %}
 
     {% if result %}
     <div class="result">
