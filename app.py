@@ -19,11 +19,22 @@ def home():
             result = "✅ Pass 🎉"
         else:
             result = "❌ Fail 😟"
-        # Save to CSV (this must be after setting result, and indented under POST)
+        # Save to CSV
         with open('predictions.csv', 'a', newline='') as f:
             writer = csv.writer(f)
             writer.writerow([hours, attendance, internal, result])
     return render_template('index.html', result=result)
+
+@app.route('/history')
+def history():
+    data = []
+    try:
+        with open('predictions.csv', newline='') as f:
+            reader = csv.reader(f)
+            data = list(reader)
+    except FileNotFoundError:
+        pass  # no data yet
+    return render_template('history.html', data=data)
 
 if __name__ == '__main__':
     app.run(debug=True)
