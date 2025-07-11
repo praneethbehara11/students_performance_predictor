@@ -51,9 +51,9 @@
     <a href="/history">📊 View Prediction History</a>
 
     <form method="POST">
-        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
-        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
-        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required oninput="this.value=this.value.replace(/[^0-9.]/g,'');">
+        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required oninput="this.value=this.value.replace(/[^0-9.]/g,'');">
+        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required oninput="this.value=this.value.replace(/[^0-9.]/g,'');">
         
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
