@@ -2,34 +2,31 @@
 <html>
 <head>
     <title>Student Performance Predictor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        html, body {
+        body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            height: 100%;
-            font-family: Arial, sans-serif;
-            transition: background-color 0.3s;
-        }
-        body {
+            min-height: 100vh;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: white;
+            transition: background-color 0.3s;
         }
         .container {
+            background: rgba(255,255,255,0.8);  /* optional light background for content contrast */
+            padding: 20px;
+            border-radius: 10px;
             text-align: center;
-            width: 280px;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 10px;
+        form {
+            margin-top: 10px;
         }
         input[type="text"], input[type="submit"], button, select {
             margin: 5px 0;
             padding: 8px;
-            width: 100%;
-            box-sizing: border-box;
+            width: 200px;
         }
         .result {
             margin-top: 10px;
@@ -40,12 +37,6 @@
             margin-top: 10px;
             font-weight: bold;
             color: red;
-        }
-        a {
-            display: inline-block;
-            margin: 10px 0;
-            text-decoration: none;
-            color: #007BFF;
         }
         footer {
             margin-top: 15px;
@@ -68,27 +59,21 @@
 <body>
 <div class="container">
     <h1>Student Performance Predictor</h1>
-
     <a href="/history">📊 View Prediction History</a>
-
     <form method="POST">
-        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
-        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
-        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required><br>
+        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
+        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
         <input type="submit" value="Predict">
         <button type="button" onclick="resetFields()">Reset</button>
     </form>
 
     {% if error %}
-    <div class="error">
-        {{ error }}
-    </div>
+    <div class="error">{{ error }}</div>
     {% endif %}
 
     {% if result %}
-    <div class="result">
-        Prediction Result: {{ result }}
-    </div>
+    <div class="result">Prediction Result: {{ result }}</div>
     {% endif %}
 
     <label for="bgColor">🎨 Change Background Color:</label>
@@ -100,10 +85,7 @@
         <option value="lavender">Lavender</option>
         <option value="lightpink">Light Pink</option>
     </select>
-
-    <footer>
-        Designed & Developed by Praneeth Behara
-    </footer>
+    <footer>Designed & Developed by Praneeth Behara</footer>
 </div>
 </body>
 </html>
