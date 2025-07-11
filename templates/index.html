@@ -3,24 +3,57 @@
 <head>
     <title>Student Performance Predictor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body.custom-bg {
+            background-color: var(--bg-color, #f9f9f9);
+        }
+    </style>
 </head>
-<body>
+<body class="custom-bg">
     <h1>Student Performance Predictor</h1>
 
     <a href="/history">📊 View Prediction History</a>
 
-    <form method="POST">
+    <form method="POST" id="predictForm">
         <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required><br>
         <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
         <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
         <input type="submit" value="Predict">
-        <button type="reset">Reset</button>
+        <button type="button" onclick="resetForm()">Reset</button>
     </form>
+
+    <div style="margin-top: 15px;">
+        <label>🎨 Change Background Color: </label>
+        <input type="color" id="bgPicker">
+    </div>
 
     {% if result %}
     <div class="result">
         Prediction Result: {{ result }}
     </div>
     {% endif %}
+
+    <script>
+        // Reset form fields on client side
+        function resetForm() {
+            document.getElementById("predictForm").reset();
+        }
+
+        // Change background color and save preference
+        const picker = document.getElementById('bgPicker');
+        picker.addEventListener('input', function() {
+            document.body.style.setProperty('--bg-color', picker.value);
+            localStorage.setItem('bgColor', picker.value);
+        });
+
+        // Load saved color on page load
+        window.onload = function() {
+            const saved = localStorage.getItem('bgColor');
+            if (saved) {
+                document.body.style.setProperty('--bg-color', saved);
+                picker.value = saved;
+            }
+        };
+    </script>
 </body>
 </html>
