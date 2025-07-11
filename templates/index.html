@@ -6,6 +6,9 @@
 </head>
 <body>
     <h1>Student Performance Predictor</h1>
+
+    <a href="/history">📊 View Prediction History</a>
+
     <form method="POST">
         <input type="text" name="hours" placeholder="Study Hours" required><br>
         <input type="text" name="attendance" placeholder="Attendance %" required><br>
@@ -13,6 +16,7 @@
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
     </form>
+
     {% if result %}
     <div class="result">
         Prediction Result: {{ result }}
