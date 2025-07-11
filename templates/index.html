@@ -5,7 +5,23 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         body.custom-bg {
-            background-color: var(--bg-color, #f9f9f9);
+            background-color: var(--bg-color, #ffd6a5); /* default peach/orange */
+            transition: background-color 0.5s;
+        }
+        h1 {
+            font-family: sans-serif;
+        }
+        form {
+            margin-top: 20px;
+        }
+        input[type="text"], input[type="submit"], button, input[type="color"] {
+            margin: 5px;
+            padding: 8px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -19,12 +35,12 @@
         <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required><br>
         <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required><br>
         <input type="submit" value="Predict">
-        <button type="button" onclick="resetForm()">Reset</button>
+        <button type="button" onclick="resetFields()">Reset</button>
     </form>
 
-    <div style="margin-top: 15px;">
-        <label>🎨 Change Background Color: </label>
-        <input type="color" id="bgPicker">
+    <div>
+        🎨 <label for="bgColor">Pick Background Color:</label>
+        <input type="color" id="bgColor" name="bgColor" value="#ffd6a5">
     </div>
 
     {% if result %}
@@ -34,26 +50,17 @@
     {% endif %}
 
     <script>
-        // Reset form fields on client side
-        function resetForm() {
-            document.getElementById("predictForm").reset();
-        }
-
-        // Change background color and save preference
-        const picker = document.getElementById('bgPicker');
-        picker.addEventListener('input', function() {
-            document.body.style.setProperty('--bg-color', picker.value);
-            localStorage.setItem('bgColor', picker.value);
+        // Change background color
+        document.getElementById('bgColor').addEventListener('input', function() {
+            document.body.style.setProperty('--bg-color', this.value);
         });
 
-        // Load saved color on page load
-        window.onload = function() {
-            const saved = localStorage.getItem('bgColor');
-            if (saved) {
-                document.body.style.setProperty('--bg-color', saved);
-                picker.value = saved;
-            }
-        };
+        // Clear form fields
+        function resetFields() {
+            document.querySelector('input[name="hours"]').value = '';
+            document.querySelector('input[name="attendance"]').value = '';
+            document.querySelector('input[name="internal"]').value = '';
+        }
     </script>
 </body>
 </html>
