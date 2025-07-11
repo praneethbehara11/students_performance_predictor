@@ -2,32 +2,32 @@
 <html>
 <head>
     <title>Prediction History</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { padding: 8px 12px; border: 1px solid #ccc; text-align: center; }
-        th { background-color: #f2f2f2; }
-        a { text-decoration: none; color: blue; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h2>📊 Prediction History</h2>
-    <a href="/">⬅️ Back to Home</a>
-    <table>
-        <tr>
-            <th>Hours</th>
-            <th>Attendance</th>
-            <th>Internal</th>
-            <th>Result</th>
-        </tr>
-        {% for row in data %}
-        <tr>
-            <td>{{ row[0] }}</td>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[2] }}</td>
-            <td>{{ row[3] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <h1>📊 Prediction History</h1>
+    <a href="/">⬅ Back to Predictor</a>
+    {% if history %}
+        <table>
+            <tr>
+                <th>Study Hours</th>
+                <th>Attendance %</th>
+                <th>Internal Marks</th>
+                <th>Result</th>
+                <th>Date & Time</th>
+            </tr>
+            {% for row in history %}
+            <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td>{{ row[4] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No predictions yet!</p>
+    {% endif %}
 </body>
 </html>
