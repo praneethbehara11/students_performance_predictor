@@ -9,13 +9,11 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            background-color: white;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-        }
-        .container {
-            text-align: center;
+            background-color: white;
         }
         h1 {
             margin-bottom: 10px;
@@ -23,8 +21,6 @@
         form {
             margin-top: 10px;
             width: 250px;
-            margin-left: auto;
-            margin-right: auto;
         }
         input[type="text"], input[type="submit"], button, select {
             margin: 5px 0;
@@ -39,7 +35,6 @@
         }
         a {
             margin-top: 10px;
-            display: inline-block;
             text-decoration: none;
             color: #007BFF;
         }
@@ -51,20 +46,20 @@
     </style>
 </head>
 <body>
-<div class="container">
     <h1>Student Performance Predictor</h1>
     
     <a href="/history">📊 View Prediction History</a>
 
-    <form method="POST" onsubmit="return validateInputs()">
-        <input type="text" name="hours" id="hours" placeholder="Study Hours" value="{{ hours }}" required>
-        <input type="text" name="attendance" id="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
-        <input type="text" name="internal" id="internal" placeholder="Internal Marks" value="{{ internal }}" required>
+    <form method="POST">
+        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
+        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
+        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
         
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
     </form>
 
+    <!-- Color theme switch -->
     <select onchange="document.body.style.backgroundColor=this.value">
         <option value="white">Choose Background Color</option>
         <option value="#FFFAE3">🌼 Light Yellow</option>
@@ -89,20 +84,5 @@
     <footer>
         Designed & Developed by Praneeth Behara
     </footer>
-</div>
-
-<script>
-    function validateInputs() {
-        let hours = document.getElementById('hours').value;
-        let attendance = document.getElementById('attendance').value;
-        let internal = document.getElementById('internal').value;
-
-        if (isNaN(hours) || isNaN(attendance) || isNaN(internal)) {
-            alert("❗ Please enter only numbers for all fields.");
-            return false; // prevent form submit
-        }
-        return true; // allow form submit
-    }
-</script>
 </body>
 </html>
