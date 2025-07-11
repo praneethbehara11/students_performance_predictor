@@ -4,23 +4,27 @@
     <title>Student Performance Predictor</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        html, body {
             margin: 0;
             padding: 0;
-            min-height: 100vh; /* Ensures body takes full viewport height for vertical centering */
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+        body {
             display: flex;
-            flex-direction: column; /* Stacks children vertically */
-            justify-content: center; /* Centers children along the main axis (vertically, since flex-direction is column) */
-            align-items: center; /* Centers children along the cross-axis (horizontally, since flex-direction is column) */
+            justify-content: center;
+            align-items: center;
             background-color: white;
+        }
+        .container {
+            text-align: center;
+            width: 280px;
         }
         h1 {
             margin-bottom: 10px;
         }
         form {
             margin-top: 10px;
-            width: 250px; /* This sets the form's width, but align-items should center this 250px block */
         }
         input[type="text"], input[type="submit"], button, select {
             margin: 5px 0;
@@ -34,6 +38,7 @@
             font-size: 1.1em;
         }
         a {
+            display: inline-block;
             margin-top: 10px;
             text-decoration: none;
             color: #007BFF;
@@ -46,14 +51,15 @@
     </style>
 </head>
 <body>
+<div class="container">
     <h1>Student Performance Predictor</h1>
     
     <a href="/history">📊 View Prediction History</a>
 
-    <form method="POST">
-        <input type="text" name="hours" placeholder="Study Hours" value="{{ hours }}" required>
-        <input type="text" name="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
-        <input type="text" name="internal" placeholder="Internal Marks" value="{{ internal }}" required>
+    <form method="POST" onsubmit="return validateInputs()">
+        <input type="text" name="hours" id="hours" placeholder="Study Hours" value="{{ hours }}" required>
+        <input type="text" name="attendance" id="attendance" placeholder="Attendance %" value="{{ attendance }}" required>
+        <input type="text" name="internal" id="internal" placeholder="Internal Marks" value="{{ internal }}" required>
         
         <input type="submit" value="Predict">
         <button type="reset">Reset</button>
@@ -83,5 +89,19 @@
     <footer>
         Designed & Developed by Praneeth Behara
     </footer>
+</div>
+
+<script>
+    function validateInputs() {
+        let hours = document.getElementById('hours').value;
+        let attendance = document.getElementById('attendance').value;
+        let internal = document.getElementById('internal').value;
+        if (isNaN(hours) || isNaN(attendance) || isNaN(internal)) {
+            alert("❗ Please enter only numbers for all fields.");
+            return false;
+        }
+        return true;
+    }
+</script>
 </body>
 </html>
