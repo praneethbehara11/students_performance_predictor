@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# --- Custom CSS for white-themed cards and clean layout ---
+# --- Custom CSS for white-themed cards and soft input colors ---
 st.markdown(
     """
     <style>
@@ -12,7 +12,7 @@ st.markdown(
         color: black;
     }
 
-    /* Remove default Streamlit padding/margin */
+    /* Remove default padding/margin */
     .block-container {
         padding: 0rem 1rem 1rem 1rem;
     }
@@ -21,7 +21,7 @@ st.markdown(
         margin: 0;
     }
 
-    /* Card style for sections (title, inputs, tables) */
+    /* Card style */
     .card {
         background-color: white;
         padding: 2rem;
@@ -32,8 +32,8 @@ st.markdown(
 
     /* Input boxes and number inputs */
     div[data-baseweb="input"], .stNumberInput > div > div > input {
-        background-color: #fafafa !important;
-        color: black !important;
+        background-color: #f0f0f0 !important;  /* lighter gray */
+        color: #333333 !important;             /* soft dark gray text */
         border-radius: 5px !important;
         border: 1px solid #ddd !important;
         padding: 0.4rem !important;
@@ -61,11 +61,6 @@ st.markdown(
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
 
-    /* Footer text */
-    p {
-        color: gray;
-    }
-
     /* Floating message cards */
     .message-card {
         padding: 1rem;
@@ -83,6 +78,11 @@ st.markdown(
         background-color: #e8f5e9;  /* light green */
         color: #2e7d32;
     }
+
+    /* Footer text */
+    p {
+        color: gray;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -98,11 +98,9 @@ model = load_model()
 # Title card
 st.markdown('<div class="card"><h1 style="text-align:center;">🎓 Student Performance Predictor</h1></div>', unsafe_allow_html=True)
 
-# Initialize history in session state
+# Initialize history
 if "history" not in st.session_state:
-    st.session_state.history = pd.DataFrame(
-        columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction']
-    )
+    st.session_state.history = pd.DataFrame(columns=['Name','Hours_Studied','Attendance','Internal_Score','Prediction'])
 
 # Input card
 st.markdown('<div class="card">', unsafe_allow_html=True)
@@ -116,45 +114,33 @@ if st.button("Predict Performance"):
         st.warning("⚠️ Please enter the student's name.")
     else:
         features = pd.DataFrame([[hours_studied, attendance, internal_score]],
-                                columns=['Hours_Studied', 'Attendance', 'Internal_Score'])
+                                columns=['Hours_Studied','Attendance','Internal_Score'])
         prediction = model.predict(features)[0]
 
         # Save to history
         st.session_state.history = pd.concat([
             st.session_state.history,
             pd.DataFrame([[student_name, hours_studied, attendance, internal_score,
-                           "Pass" if prediction == 1 else "Fail"]],
-                         columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
+                           "Pass" if prediction==1 else "Fail"]],
+                         columns=['Name','Hours_Studied','Attendance','Internal_Score','Prediction'])
         ], ignore_index=True)
 
         # Floating message
-        if prediction == 1:
+        if prediction==1:
             st.markdown(f'<div class="message-card pass">✅ {student_name} is likely to Pass!</div>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div class="message-card fail">❌ {student_name} is likely to Fail.</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Prediction History card
+# Prediction History
 st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("📊 Prediction History")
 st.dataframe(st.session_state.history)
 if not st.session_state.history.empty:
     csv = st.session_state.history.to_csv(index=False).encode('utf-8')
-    st.download_button(
-        label="⬇️ Download History as CSV",
-        data=csv,
-        file_name="student_performance_history.csv",
-        mime="text/csv"
-    )
+    st.download_button(label="⬇️ Download History as CSV", data=csv,
+                       file_name="student_performance_history.csv", mime="text/csv")
 st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
-st.markdown(
-    """
-    <hr>
-    <p style="text-align: center;">
-    Designed and Developed by <b>Praneeth Behara</b>
-    </p>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown('<hr><p style="text-align:center;">Designed and Developed by <b>Praneeth Behara</b></p>', unsafe_allow_html=True)
