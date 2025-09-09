@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# --- Custom CSS for white-themed cards ---
+# --- Custom CSS for white-themed cards and floating messages ---
 st.markdown(
     """
     <style>
@@ -56,6 +56,25 @@ st.markdown(
     p {
         color: gray;
     }
+
+    /* Floating message cards */
+    .message-card {
+        background-color: #e8f5e9;  /* default green-ish */
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        font-weight: bold;
+        text-align: center;
+    }
+    .fail {
+        background-color: #ffebee;  /* light red for fail */
+        color: #b71c1c;
+    }
+    .pass {
+        background-color: #e8f5e9;  /* light green for pass */
+        color: #2e7d32;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -83,7 +102,9 @@ student_name = st.text_input("Student Name")
 hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1, value=0)
 attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1, value=0)
 internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1, value=0)
+st.markdown('</div>', unsafe_allow_html=True)
 
+# Predict button
 if st.button("Predict Performance"):
     if student_name.strip() == "":
         st.warning("⚠️ Please enter the student's name.")
@@ -100,12 +121,11 @@ if st.button("Predict Performance"):
                          columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
         ], ignore_index=True)
 
-        # Show result in a card-like box
+        # Floating message card
         if prediction == 1:
-            st.success(f"✅ {student_name} is likely to Pass!")
+            st.markdown(f'<div class="message-card pass">✅ {student_name} is likely to Pass!</div>', unsafe_allow_html=True)
         else:
-            st.error(f"❌ {student_name} is likely to Fail.")
-st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="message-card fail">❌ {student_name} is likely to Fail.</div>', unsafe_allow_html=True)
 
 # History table card
 st.markdown('<div class="card">', unsafe_allow_html=True)
