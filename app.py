@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# --- Custom CSS for white-themed cards and floating messages ---
+# --- Custom CSS for white-themed cards and clean layout ---
 st.markdown(
     """
     <style>
@@ -10,6 +10,15 @@ st.markdown(
     .stApp {
         background-color: #f5f5f5;
         color: black;
+    }
+
+    /* Remove default Streamlit padding/margin */
+    .block-container {
+        padding: 0rem 1rem 1rem 1rem;
+    }
+    .stForm {
+        padding: 0;
+        margin: 0;
     }
 
     /* Card style for sections (title, inputs, tables) */
@@ -59,20 +68,19 @@ st.markdown(
 
     /* Floating message cards */
     .message-card {
-        background-color: #e8f5e9;  /* default green-ish */
         padding: 1rem;
         margin: 1rem 0;
         border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         font-weight: bold;
         text-align: center;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .fail {
-        background-color: #ffebee;  /* light red for fail */
+        background-color: #ffebee;  /* light red */
         color: #b71c1c;
     }
     .pass {
-        background-color: #e8f5e9;  /* light green for pass */
+        background-color: #e8f5e9;  /* light green */
         color: #2e7d32;
     }
     </style>
@@ -96,12 +104,13 @@ if "history" not in st.session_state:
         columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction']
     )
 
-# Input card (cleaned, no extra boxes)
+# Input card
 st.markdown('<div class="card">', unsafe_allow_html=True)
 student_name = st.text_input("Student Name")
 hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1, value=0)
 attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1, value=0)
 internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1, value=0)
+
 if st.button("Predict Performance"):
     if student_name.strip() == "":
         st.warning("⚠️ Please enter the student's name.")
@@ -110,7 +119,7 @@ if st.button("Predict Performance"):
                                 columns=['Hours_Studied', 'Attendance', 'Internal_Score'])
         prediction = model.predict(features)[0]
 
-        # Save to history with name
+        # Save to history
         st.session_state.history = pd.concat([
             st.session_state.history,
             pd.DataFrame([[student_name, hours_studied, attendance, internal_score,
@@ -118,14 +127,14 @@ if st.button("Predict Performance"):
                          columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
         ], ignore_index=True)
 
-        # Floating message card
+        # Floating message
         if prediction == 1:
             st.markdown(f'<div class="message-card pass">✅ {student_name} is likely to Pass!</div>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div class="message-card fail">❌ {student_name} is likely to Fail.</div>', unsafe_allow_html=True)
 st.markdown('</div>', unsafe_allow_html=True)
 
-# Prediction History card (cleaned)
+# Prediction History card
 st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("📊 Prediction History")
 st.dataframe(st.session_state.history)
