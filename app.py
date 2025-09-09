@@ -96,15 +96,12 @@ if "history" not in st.session_state:
         columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction']
     )
 
-# Input card
+# Input card (cleaned, no extra boxes)
 st.markdown('<div class="card">', unsafe_allow_html=True)
 student_name = st.text_input("Student Name")
 hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1, value=0)
 attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1, value=0)
 internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1, value=0)
-st.markdown('</div>', unsafe_allow_html=True)
-
-# Predict button
 if st.button("Predict Performance"):
     if student_name.strip() == "":
         st.warning("⚠️ Please enter the student's name.")
@@ -126,13 +123,12 @@ if st.button("Predict Performance"):
             st.markdown(f'<div class="message-card pass">✅ {student_name} is likely to Pass!</div>', unsafe_allow_html=True)
         else:
             st.markdown(f'<div class="message-card fail">❌ {student_name} is likely to Fail.</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
-# History table card
+# Prediction History card (cleaned)
 st.markdown('<div class="card">', unsafe_allow_html=True)
 st.subheader("📊 Prediction History")
 st.dataframe(st.session_state.history)
-
-# Download button
 if not st.session_state.history.empty:
     csv = st.session_state.history.to_csv(index=False).encode('utf-8')
     st.download_button(
