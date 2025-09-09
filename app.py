@@ -13,31 +13,38 @@ st.title("🎓 Student Performance Predictor")
 
 # Initialize history in session state
 if "history" not in st.session_state:
-    st.session_state.history = pd.DataFrame(columns=['Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
+    st.session_state.history = pd.DataFrame(
+        columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction']
+    )
 
 # Inputs
+student_name = st.text_input("Student Name")
 hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1, value=0)
 attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1, value=0)
 internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1, value=0)
 
 if st.button("Predict Performance"):
-    features = pd.DataFrame([[hours_studied, attendance, internal_score]],
-                            columns=['Hours_Studied', 'Attendance', 'Internal_Score'])
-
-    prediction = model.predict(features)[0]
-
-    # Save to history
-    st.session_state.history = pd.concat([
-        st.session_state.history,
-        pd.DataFrame([[hours_studied, attendance, internal_score, "Pass" if prediction == 1 else "Fail"]],
-                     columns=['Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
-    ], ignore_index=True)
-
-    # Show result
-    if prediction == 1:
-        st.success("✅ The student is likely to Pass!")
+    if student_name.strip() == "":
+        st.warning("⚠️ Please enter the student's name.")
     else:
-        st.error("❌ The student is likely to Fail.")
+        features = pd.DataFrame([[hours_studied, attendance, internal_score]],
+                                columns=['Hours_Studied', 'Attendance', 'Internal_Score'])
+
+        prediction = model.predict(features)[0]
+
+        # Save to history with name
+        st.session_state.history = pd.concat([
+            st.session_state.history,
+            pd.DataFrame([[student_name, hours_studied, attendance, internal_score,
+                           "Pass" if prediction == 1 else "Fail"]],
+                         columns=['Name', 'Hours_Studied', 'Attendance', 'Internal_Score', 'Prediction'])
+        ], ignore_index=True)
+
+        # Show result
+        if prediction == 1:
+            st.success(f"✅ {student_name} is likely to Pass!")
+        else:
+            st.error(f"❌ {student_name} is likely to Fail.")
 
 # Show history table
 st.subheader("📊 Prediction History")
