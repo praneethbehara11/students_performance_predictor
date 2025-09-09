@@ -1,27 +1,27 @@
+import streamlit as st
 import pandas as pd
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-import pickle
+import joblib
 
-# Load data
-df = pd.read_csv('student_data.csv')
+# Load model
+@st.cache_resource
+def load_model():
+    return joblib.load("model.pkl")
 
-# Convert 'Pass'/'Fail' to 1/0
-df['Final_Result'] = df['Final_Result'].map({'Pass': 1, 'Fail': 0})
+model = load_model()
 
-# Features and target
-X = df[['Hours_Studied', 'Attendance', 'Internal_Score']]
-y = df['Final_Result']
+st.title("🎓 Student Performance Predictor")
 
-# Split data (80% train, 20% test)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+# Take inputs
+hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1)
+attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1)
+internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1)
 
-# Train model
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
+# Prediction
+if st.button("Predict Performance"):
+    features = [[hours_studied, attendance, internal_score]]  # Must match training order
+    prediction = model.predict(features)
 
-# Save the trained model
-with open('model.pkl', 'wb') as f:
-    pickle.dump(model, f)
-
-print("✅ Model trained and saved as model.pkl")
+    if prediction[0] == 1:
+        st.success("✅ The student is likely to Pass!")
+    else:
+        st.error("❌ The student is likely to Fail.")
