@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# --- Custom CSS for white-themed cards and soft input colors ---
+# --- Custom CSS for clean white input boxes and cards ---
 st.markdown(
     """
     <style>
@@ -30,13 +30,19 @@ st.markdown(
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    /* Input boxes and number inputs */
+    /* Input boxes and number inputs - clean white theme */
     div[data-baseweb="input"], .stNumberInput > div > div > input {
-        background-color: #f0f0f0 !important;  /* lighter gray */
-        color: #333333 !important;             /* soft dark gray text */
+        background-color: #ffffff !important;  /* white background */
+        color: #555555 !important;             /* soft gray text */
         border-radius: 5px !important;
         border: 1px solid #ddd !important;
-        padding: 0.4rem !important;
+        padding: 0.5rem !important;
+    }
+
+    /* Placeholder text color */
+    ::placeholder {
+        color: #999999 !important;            /* light gray placeholder */
+        opacity: 1;
     }
 
     /* Buttons */
@@ -104,7 +110,7 @@ if "history" not in st.session_state:
 
 # Input card
 st.markdown('<div class="card">', unsafe_allow_html=True)
-student_name = st.text_input("Student Name")
+student_name = st.text_input("Student Name", placeholder="Enter student name")
 hours_studied = st.number_input("Hours Studied", min_value=0, max_value=24, step=1, value=0)
 attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1, value=0)
 internal_score = st.number_input("Internal Score", min_value=0, max_value=100, step=1, value=0)
