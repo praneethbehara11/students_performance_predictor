@@ -1,56 +1,21 @@
-from flask import Flask, render_template, request
-import pickle
-import csv
-
-app = Flask(__name__)
+import streamlit as st
+import joblib
+import pandas as pd
 
 # Load model
-model = pickle.load(open('model.pkl', 'rb'))
+@st.cache_resource
+def load_model():
+    return joblib.load("model.pkl")
 
-@app.route('/', methods=['GET', 'POST'])
-def home():
-    result = None
-    error = None
-    hours = ''
-    attendance = ''
-    internal = ''
+model = load_model()
 
-    if request.method == 'POST':
-        hours = request.form['hours']
-        attendance = request.form['attendance']
-        internal = request.form['internal']
+st.title("🎓 Student Performance Predictor")
 
-        try:
-            h = float(hours)
-            a = float(attendance)
-            i = float(internal)
-            prediction = model.predict([[h, a, i]])
-            if prediction[0] == 1:
-                result = "✅ Pass 🎉"
-            else:
-                result = "❌ Fail 😟"
+# Inputs
+study_hours = st.number_input("Study Hours", min_value=0, max_value=24, step=1)
+attendance = st.number_input("Attendance (%)", min_value=0, max_value=100, step=1)
 
-            # Save to CSV
-            with open('predictions.csv', 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow([hours, attendance, internal, result])
-
-        except ValueError:
-            error = "⚠️ Please enter only numbers!"
-
-    return render_template('index.html', result=result, error=error, 
-                           hours=hours, attendance=attendance, internal=internal)
-
-@app.route('/history')
-def history():
-    rows = []
-    try:
-        with open('predictions.csv', newline='') as f:
-            reader = csv.reader(f)
-            rows = list(reader)
-    except FileNotFoundError:
-        pass
-    return render_template('history.html', rows=rows)
-
-if __name__ == '__main__':
-    app.run(debug=True)
+if st.button("Predict"):
+    features = [[study_hours, attendance]]
+    prediction = model.predict(features)
+    st.success(f"Predicted Performance: {prediction[0]}")
