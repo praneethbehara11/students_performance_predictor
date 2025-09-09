@@ -4,3 +4,4 @@ streamlit
 numpy
 flask
 gunicorn
+joblib
